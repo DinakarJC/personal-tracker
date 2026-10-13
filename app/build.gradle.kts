@@ -12,9 +12,21 @@ android {
         applicationId = "local.tracker.app"
         minSdk = 35
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0-capture-check"
+        versionCode = 2
+        versionName = "0.2.0-parser-test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    flavorDimensions += "capture"
+    productFlavors {
+        create("manual") {
+            dimension = "capture"
+            applicationIdSuffix = ".manual"
+            manifestPlaceholders["appLabel"] = "Personal Tracker Test"
+        }
+        create("sms") {
+            dimension = "capture"
+            manifestPlaceholders["appLabel"] = "Personal Expense Tracker"
+        }
     }
     buildFeatures { compose = true }
     compileOptions {

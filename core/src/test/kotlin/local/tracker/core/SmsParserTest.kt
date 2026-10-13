@@ -16,6 +16,12 @@ class SmsParserTest {
     private val credit = templates.first { it.templateId == "hdfc-upi-credit" }.examples.single().sms
 
     @Test
+    fun `test screen examples come from validated built-in templates`() {
+        assertEquals(debit, parser.exampleMessage("hdfc-upi-debit"))
+        assertNull(parser.exampleMessage("unknown-template"))
+    }
+
+    @Test
     fun `Appendix A debit has exactly the reported fields`() {
         val transaction = accepted(debit)
         assertEquals(45_000L, transaction.amountMinor)

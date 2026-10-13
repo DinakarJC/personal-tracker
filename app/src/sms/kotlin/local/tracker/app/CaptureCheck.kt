@@ -8,11 +8,6 @@ import androidx.core.content.edit
 import local.tracker.core.ParseOutcome
 import local.tracker.core.SmsParser
 
-internal fun createParser(): SmsParser {
-    val templateText = requireNotNull(SmsParser::class.java.getResource("/templates/hdfc-v1.json")).readText()
-    return SmsParser.fromJson(templateText, setOf("HDFCBN-S"))
-}
-
 /** Device feasibility probe. Keeps status metadata only, never SMS bodies or financial fields. */
 class IncomingSmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

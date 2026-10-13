@@ -37,23 +37,48 @@ jobs:
       - name: Test, lint, and build APKs
         run: >-
           ./gradlew :core:test :core:ktlintCheck :app:ktlintCheck
-          :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
+          :app:lintManualDebug :app:lintSmsDebug
+          :app:assembleManualDebug :app:assembleSmsDebug
+          :app:assembleManualDebugAndroidTest :app:assembleSmsDebugAndroidTest
           --no-daemon --console=plain
+
+      - name: Verify manual APK capabilities
+        run: |
+          manual_manifest="$("$ANDROID_HOME/build-tools/35.0.0/aapt" dump xmltree app/build/outputs/apk/manual/debug/app-manual-debug.apk AndroidManifest.xml)"
+          case "$manual_manifest" in
+            *android.permission.READ_SMS*|*android.permission.RECEIVE_SMS*|*android.permission.INTERNET*|*android.provider.Telephony.SMS_RECEIVED*)
+              echo "Manual test APK unexpectedly contains SMS or network access" >&2
+              exit 1
+              ;;
+          esac
 
       - name: Prepare phone download
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/debug/app-debug.apk dist/expense-tracker-debug.apk
+          cp app/build/outputs/apk/manual/debug/app-manual-debug.apk dist/expense-tracker-parser-test.apk
+          cp app/build/outputs/apk/sms/debug/app-sms-debug.apk dist/expense-tracker-sms-test.apk
           cd dist
-          sha256sum expense-tracker-debug.apk > expense-tracker-debug.apk.sha256
+          sha256sum expense-tracker-parser-test.apk > expense-tracker-parser-test.apk.sha256
+          sha256sum expense-tracker-sms-test.apk > expense-tracker-sms-test.apk.sha256
 
-      - name: Upload APK
+      - name: Upload parser test APK
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
-          name: expense-tracker-debug-apk
+          name: expense-tracker-parser-test-apk
           path: |
-            dist/expense-tracker-debug.apk
-            dist/expense-tracker-debug.apk.sha256
+            dist/expense-tracker-parser-test.apk
+            dist/expense-tracker-parser-test.apk.sha256
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+
+      - name: Upload SMS development APK
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: expense-tracker-sms-test-apk
+          path: |
+            dist/expense-tracker-sms-test.apk
+            dist/expense-tracker-sms-test.apk.sha256
           if-no-files-found: error
           compression-level: 0
           retention-days: 30
@@ -66,7 +91,8 @@ jobs:
           path: |
             core/build/reports/tests/test/
             core/build/test-results/test/
-            app/build/reports/lint-results-debug.*
+            app/build/reports/lint-results-*.html
+            app/build/reports/lint-results-*.txt
             app/build/reports/ktlint/
             core/build/reports/ktlint/
           if-no-files-found: warn

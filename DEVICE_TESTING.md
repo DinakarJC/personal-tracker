@@ -4,6 +4,18 @@ Target confirmed by user: Android 15. USB is unavailable on the office laptop. N
 
 The user selected manual APK installation. Wireless pairing is an optional future route, not a prerequisite for the current build.
 
+## Parser test after Play Protect blocked the SMS build
+
+The user reported the sensitive-data/fraud Play Protect block while installing the original SMS-permission APK. Use the separate `expense-tracker-parser-test.apk` build on the Android 15 P3 Ultra instead. Its application name is **Personal Tracker Test** and its application ID is `local.tracker.app.manual`.
+
+1. Download the parser-test APK from its GitHub release and install it manually.
+2. Open Personal Tracker Test. It should request no SMS permissions.
+3. Tap Use sample debit, then Parse message. Check amount ₹450.00, payee JOHN D, date 2026-09-15, account suffix 1234, and reference 100000000001.
+4. Tap Clear message. The input and parsed result should disappear.
+5. Optionally paste a redacted HDFC transaction message and its sender label. Check the extracted values on the phone; do not send personal message text to GitHub or chat for this test.
+
+This tests the shared parser and phone UI only. It does not read the inbox, save ledger transactions, or validate incoming SMS delivery. Removing the sensitive permissions addresses the reported trigger, but installation acceptance must still be confirmed on the phone. Google's explanation of the warning: https://developers.google.com/android/play-protect/warning-dev-guidance
+
 ## Manual installation
 
 1. Transfer `dist/expense-tracker-capture-check.apk` to the P3 Ultra using your chosen permitted file-transfer channel. The original Gradle output is `app/build/outputs/apk/debug/app-debug.apk`.

@@ -76,6 +76,8 @@ class SmsParser private constructor(
 ) {
     private val allowedSenders = reviewedSenders.map(::normalizeSender).toSet()
 
+    fun exampleMessage(templateId: String): String? = templates.firstOrNull { it.first.templateId == templateId }?.first?.examples?.firstOrNull()?.sms
+
     fun parse(sender: String, body: String): ParseOutcome {
         val normalizedSender = normalizeSender(sender)
         if (normalizedSender !in allowedSenders) return ParseOutcome.IgnoredSender
