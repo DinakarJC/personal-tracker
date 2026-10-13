@@ -6,7 +6,7 @@ The `core` module contains independently tested HDFC parsing from runtime JSON t
 
 ## Download on your phone
 
-The capture-check APK is distributed from [GitHub Releases](https://github.com/DinakarJC/personal-tracker/releases). Open the release on your Android 15 phone and download `expense-tracker-capture-check.apk` from Assets. Follow `DEVICE_TESTING.md` for manual installation and the permission/preview checks.
+**[Download the capture-check APK](https://github.com/DinakarJC/personal-tracker/releases/download/v0.1.0-capture-check/expense-tracker-capture-check.apk)** on your Android 15 phone. Its [release page](https://github.com/DinakarJC/personal-tracker/releases/tag/v0.1.0-capture-check) includes the checksum and validation notes. Follow `DEVICE_TESTING.md` for manual installation and the permission/preview checks.
 
 GitHub Actions builds the application on pushes to `main`, pull requests, or manual workflow runs. A successful **Android build** run uploads the **expense-tracker-debug-apk** artifact containing the APK and SHA-256 checksum. Tests, formatting checks, and Android lint must pass before the APK is uploaded. Reports are uploaded separately even when a check fails. Device instrumentation tests are compiled, not executed on a phone by this workflow.
 
