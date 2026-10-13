@@ -1,0 +1,129 @@
+[
+  {
+    "schema_version": 1,
+    "version": 1,
+    "bank": "HDFC Bank",
+    "sender_ids": [
+      "HDFCBN-S"
+    ],
+    "flags": [
+      "case_insensitive"
+    ],
+    "date_format": "dd/MM/yy",
+    "negative_examples": [
+      "123456 is your one-time password. Do not share it with anyone.",
+      "Get an offer of Rs.450.00 on shopping today."
+    ],
+    "template_id": "hdfc-upi-debit",
+    "message_type": "debit",
+    "direction": "debit",
+    "payment_method": "UPI",
+    "pattern": "\\ASent Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+From HDFC Bank A/C \\*?(?<account>\\d{4})\\s+To (?<payee>[^\\r\\n]+)\\s+On (?<date>\\d{2}/\\d{2}/\\d{2})\\s+Ref (?<reference>\\d{12})(?!\\d)",
+    "examples": [
+      {
+        "sms": "Sent Rs.450.00\nFrom HDFC Bank A/C *1234\nTo JOHN D\nOn 15/09/26\nRef 100000000001\nNot You?\nCall 18002586161/SMS BLOCK UPI to 7308080808",
+        "expected": {
+          "amount": 450,
+          "account": "1234",
+          "payee": "JOHN D",
+          "date": "2026-09-15",
+          "reference": "100000000001"
+        }
+      }
+    ]
+  },
+  {
+    "schema_version": 1,
+    "version": 1,
+    "bank": "HDFC Bank",
+    "sender_ids": [
+      "HDFCBN-S"
+    ],
+    "flags": [
+      "case_insensitive"
+    ],
+    "date_format": "dd/MM/yy",
+    "negative_examples": [
+      "123456 is your one-time password. Do not share it with anyone.",
+      "Get an offer of Rs.450.00 on shopping today."
+    ],
+    "template_id": "hdfc-mandate-debit",
+    "message_type": "mandate_debit",
+    "direction": "debit",
+    "payment_method": "mandate",
+    "pattern": "\\AHDFC BANK ALERT\\s+UPI Mandate:\\s+Sent Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+from HDFC Bank A/c (?<account>\\d{4})\\s+To (?<payee>[^\\r\\n]+)\\s+(?<date>\\d{2}/\\d{2}/\\d{2})\\s+Ref (?<reference>\\d{12})(?!\\d)",
+    "examples": [
+      {
+        "sms": "HDFC BANK ALERT\nUPI Mandate:\nSent Rs.300.00\nfrom HDFC Bank A/c 1234\nTo SAMPLE AUTOPAY\n05/09/26\nRef 100000000002\nNot You? Call 18002586161/SMS BLOCK UPI to 7308080808",
+        "expected": {
+          "amount": 300,
+          "account": "1234",
+          "payee": "SAMPLE AUTOPAY",
+          "date": "2026-09-05",
+          "reference": "100000000002"
+        }
+      }
+    ]
+  },
+  {
+    "schema_version": 1,
+    "version": 1,
+    "bank": "HDFC Bank",
+    "sender_ids": [
+      "HDFCBN-S"
+    ],
+    "flags": [
+      "case_insensitive"
+    ],
+    "date_format": "dd-MM-yy",
+    "negative_examples": [
+      "123456 is your one-time password. Do not share it with anyone.",
+      "Get an offer of Rs.450.00 on shopping today."
+    ],
+    "template_id": "hdfc-upi-credit",
+    "message_type": "credit",
+    "direction": "credit",
+    "payment_method": "UPI",
+    "pattern": "\\ACredit Alert!\\s+Rs\\.?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?) credited to HDFC Bank A/c XX(?<account>\\d{4}) on (?<date>\\d{2}-\\d{2}-\\d{2}) from VPA (?<upiId>[^\\s]+) \\(UPI (?<reference>\\d{12})\\)",
+    "examples": [
+      {
+        "sms": "Credit Alert!\nRs.12.50 credited to HDFC Bank A/c XX1234 on 12-09-26 from VPA merchant1@examplebank (UPI 100000000003)",
+        "expected": {
+          "amount": 12.5,
+          "account": "1234",
+          "upiId": "merchant1@examplebank",
+          "date": "2026-09-12",
+          "reference": "100000000003"
+        }
+      }
+    ]
+  },
+  {
+    "schema_version": 1,
+    "version": 1,
+    "bank": "HDFC Bank",
+    "sender_ids": [
+      "HDFCBN-S"
+    ],
+    "flags": [
+      "case_insensitive"
+    ],
+    "date_format": "dd/MM/yy",
+    "negative_examples": [
+      "123456 is your one-time password. Do not share it with anyone.",
+      "Get an offer of Rs.450.00 on shopping today."
+    ],
+    "template_id": "hdfc-mandate-notice",
+    "message_type": "non_transaction_notice",
+    "pattern": "\\AE-Mandate!\\s+Rs\\.?\\s*[\\d,]+(?:\\.\\d{1,2})? will be deducted on \\d{2}/\\d{2}/\\d{2}",
+    "examples": [
+      {
+        "sms": "E-Mandate!\nRs.300.00 will be deducted on 05/09/26, 00:00:00\nFor SAMPLE AUTOPAY mandate\nUMN 0123456789abcdef0123456789abcdef@okhdfcbank\nMaintain Balance\n-HDFC Bank",
+        "expected": {
+          "creates_record": false,
+          "raw_text_retained": false
+        }
+      }
+    ]
+  }
+]
