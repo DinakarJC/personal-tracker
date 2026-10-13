@@ -16,7 +16,9 @@ The user reported the sensitive-data/fraud Play Protect block while installing t
 
 This tests the shared parser and phone UI only. It does not read the inbox, save ledger transactions, or validate incoming SMS delivery. Removing the sensitive permissions addresses the reported trigger, but installation acceptance must still be confirmed on the phone. Google's explanation of the warning: https://developers.google.com/android/play-protect/warning-dev-guidance
 
-## Manual installation
+Device result on 2026-10-13: the user confirmed the permission-free APK installed and the sample parsed. Other manual checks and automatic SMS capture are still pending.
+
+## Manual installation of the original SMS probe (blocked on the target phone)
 
 1. Transfer `dist/expense-tracker-capture-check.apk` to the P3 Ultra using your chosen permitted file-transfer channel. The original Gradle output is `app/build/outputs/apk/debug/app-debug.apk`.
 2. Open the APK in the phone's file manager. Allow installation from that app if Android prompts, then install Personal Expense Tracker.
